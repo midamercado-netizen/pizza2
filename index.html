@@ -1,0 +1,1144 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pizzaria Delícia - Peça Online</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #e74c3c;
+            --primary-dark: #c0392b;
+            --secondary: #f39c12;
+            --dark: #2c3e50;
+            --light: #ecf0f1;
+            --gray: #95a5a6;
+            --success: #2ecc71;
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --radius: 12px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f9f9f9;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 15px;
+        }
+
+        /* Header */
+        header {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            padding: 1rem 0;
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo i {
+            font-size: 2rem;
+        }
+
+        .logo h1 {
+            font-size: 1.8rem;
+            font-weight: 700;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 20px;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: opacity 0.3s;
+        }
+
+        .nav-links a:hover {
+            opacity: 0.8;
+        }
+
+        .cart-icon {
+            position: relative;
+            cursor: pointer;
+        }
+
+        .cart-count {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: var(--secondary);
+            color: white;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('https://images.unsplash.com/photo-1513104890138-7c749659a591?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80');
+            background-size: cover;
+            background-position: center;
+            color: white;
+            padding: 5rem 0;
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .hero h2 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            max-width: 600px;
+            margin: 0 auto 2rem;
+        }
+
+        .btn {
+            display: inline-block;
+            background: var(--secondary);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn:hover {
+            background: #e67e22;
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .btn-primary {
+            background: var(--primary);
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-dark);
+        }
+
+        /* Main Content */
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 350px;
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+
+        /* Menu Section */
+        .section-title {
+            font-size: 1.8rem;
+            margin-bottom: 1.5rem;
+            color: var(--dark);
+            position: relative;
+            padding-bottom: 10px;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 60px;
+            height: 4px;
+            background: var(--primary);
+            border-radius: 2px;
+        }
+
+        .category-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .tab {
+            padding: 8px 16px;
+            background: white;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s;
+            border: 1px solid #ddd;
+        }
+
+        .tab.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        .menu-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .menu-item {
+            background: white;
+            border-radius: var(--radius);
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            transition: transform 0.3s;
+        }
+
+        .menu-item:hover {
+            transform: translateY(-5px);
+        }
+
+        .item-image {
+            height: 180px;
+            width: 100%;
+            object-fit: cover;
+        }
+
+        .item-content {
+            padding: 1.2rem;
+        }
+
+        .item-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 10px;
+        }
+
+        .item-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--dark);
+        }
+
+        .item-price {
+            font-weight: 700;
+            color: var(--primary);
+            font-size: 1.2rem;
+        }
+
+        .item-description {
+            color: var(--gray);
+            margin-bottom: 15px;
+            font-size: 0.9rem;
+        }
+
+        .item-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .quantity-controls {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .quantity-btn {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: var(--light);
+            border: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .quantity {
+            font-weight: 600;
+            min-width: 30px;
+            text-align: center;
+        }
+
+        /* Cart Section */
+        .cart-container {
+            background: white;
+            border-radius: var(--radius);
+            padding: 1.5rem;
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 100px;
+        }
+
+        .cart-items {
+            max-height: 400px;
+            overflow-y: auto;
+            margin-bottom: 1.5rem;
+        }
+
+        .cart-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .cart-item:last-child {
+            border-bottom: none;
+        }
+
+        .cart-item-info {
+            flex: 1;
+        }
+
+        .cart-item-name {
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .cart-item-price {
+            color: var(--primary);
+            font-weight: 600;
+        }
+
+        .cart-item-quantity {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .cart-summary {
+            border-top: 1px solid #eee;
+            padding-top: 1rem;
+        }
+
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+
+        .total {
+            font-weight: 700;
+            font-size: 1.2rem;
+            color: var(--dark);
+        }
+
+        .cart-actions {
+            margin-top: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .btn-block {
+            width: 100%;
+            text-align: center;
+        }
+
+        .btn-whatsapp {
+            background: #25D366;
+        }
+
+        .btn-whatsapp:hover {
+            background: #128C7E;
+        }
+
+        /* Footer */
+        footer {
+            background: var(--dark);
+            color: white;
+            padding: 3rem 0 1.5rem;
+            margin-top: 3rem;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .footer-column h3 {
+            font-size: 1.3rem;
+            margin-bottom: 1.2rem;
+            position: relative;
+            padding-bottom: 10px;
+        }
+
+        .footer-column h3::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 40px;
+            height: 3px;
+            background: var(--primary);
+        }
+
+        .footer-links {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 10px;
+        }
+
+        .footer-links a {
+            color: #bbb;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer-links a:hover {
+            color: white;
+        }
+
+        .contact-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 10px;
+            color: #bbb;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 15px;
+            margin-top: 1rem;
+        }
+
+        .social-links a {
+            color: white;
+            font-size: 1.2rem;
+            transition: color 0.3s;
+        }
+
+        .social-links a:hover {
+            color: var(--primary);
+        }
+
+        .copyright {
+            text-align: center;
+            padding-top: 1.5rem;
+            border-top: 1px solid #444;
+            color: #bbb;
+            font-size: 0.9rem;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: var(--radius);
+            width: 90%;
+            max-width: 600px;
+            max-height: 90vh;
+            overflow-y: auto;
+            padding: 2rem;
+            position: relative;
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--gray);
+        }
+
+        .modal-title {
+            margin-bottom: 1.5rem;
+            color: var(--dark);
+        }
+
+        .form-group {
+            margin-bottom: 1.2rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 500;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 10px 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
+        }
+
+        textarea.form-control {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        /* Responsive */
+        @media (max-width: 992px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+            
+            .cart-container {
+                position: static;
+                margin-top: 2rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .hero h2 {
+                font-size: 2rem;
+            }
+            
+            .menu-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .hero {
+                padding: 3rem 0;
+            }
+            
+            .hero h2 {
+                font-size: 1.8rem;
+            }
+            
+            .section-title {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <i class="fas fa-pizza-slice"></i>
+                    <h1>Pizzaria Delícia</h1>
+                </div>
+                <nav class="nav-links">
+                    <a href="#menu">Cardápio</a>
+                    <a href="#about">Sobre</a>
+                    <a href="#contact">Contato</a>
+                    <div class="cart-icon" id="cartIcon">
+                        <i class="fas fa-shopping-cart"></i>
+                        <span class="cart-count">0</span>
+                    </div>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <h2>As Melhores Pizzas da Cidade</h2>
+            <p>Mais de 20 sabores exclusivos, ingredientes frescos e entrega rápida. Peça agora pelo WhatsApp!</p>
+            <a href="#menu" class="btn">Ver Cardápio</a>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <div class="container">
+        <div class="main-content">
+            <!-- Menu Section -->
+            <section id="menu">
+                <h2 class="section-title">Nosso Cardápio</h2>
+                
+                <div class="category-tabs">
+                    <div class="tab active" data-category="pizzas">Pizzas</div>
+                    <div class="tab" data-category="bebidas">Bebidas</div>
+                    <div class="tab" data-category="combos">Combos</div>
+                </div>
+                
+                <div class="menu-grid" id="menuGrid">
+                    <!-- Menu items will be loaded here by JavaScript -->
+                </div>
+            </section>
+
+            <!-- Cart Section -->
+            <aside class="cart-container">
+                <h3>Seu Pedido</h3>
+                <div class="cart-items" id="cartItems">
+                    <p style="text-align: center; color: var(--gray); padding: 2rem 0;">Seu carrinho está vazio</p>
+                </div>
+                
+                <div class="cart-summary">
+                    <div class="summary-row">
+                        <span>Subtotal:</span>
+                        <span id="subtotal">R$ 0,00</span>
+                    </div>
+                    <div class="summary-row">
+                        <span>Taxa de entrega:</span>
+                        <span id="deliveryFee">R$ 5,00</span>
+                    </div>
+                    <div class="summary-row total">
+                        <span>Total:</span>
+                        <span id="total">R$ 5,00</span>
+                    </div>
+                </div>
+                
+                <div class="cart-actions">
+                    <button class="btn btn-primary btn-block" id="checkoutBtn">Finalizar Pedido</button>
+                    <button class="btn btn-whatsapp btn-block" id="whatsappBtn">
+                        <i class="fab fa-whatsapp"></i> Pedir pelo WhatsApp
+                    </button>
+                    <button class="btn btn-block" id="clearCartBtn">Limpar Carrinho</button>
+                </div>
+            </aside>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h3>Pizzaria Delícia</h3>
+                    <p>A melhor pizzaria da cidade, com ingredientes frescos e sabores exclusivos. Há mais de 10 anos levando qualidade e sabor para sua casa.</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-whatsapp"></i></a>
+                    </div>
+                </div>
+                
+                <div class="footer-column">
+                    <h3>Horário de Funcionamento</h3>
+                    <ul class="footer-links">
+                        <li>Segunda a Quinta: 18h - 23h</li>
+                        <li>Sexta e Sábado: 18h - 00h</li>
+                        <li>Domingo: 18h - 22h</li>
+                    </ul>
+                </div>
+                
+                <div class="footer-column">
+                    <h3>Contato</h3>
+                    <div class="contact-info">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <span>Rua das Pizzas, 123 - Centro</span>
+                    </div>
+                    <div class="contact-info">
+                        <i class="fas fa-phone"></i>
+                        <span>(11) 9999-9999</span>
+                    </div>
+                    <div class="contact-info">
+                        <i class="fas fa-envelope"></i>
+                        <span>contato@pizzariadelicia.com</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="copyright">
+                &copy; 2023 Pizzaria Delícia. Todos os direitos reservados.
+            </div>
+        </div>
+    </footer>
+
+    <!-- Checkout Modal -->
+    <div class="modal" id="checkoutModal">
+        <div class="modal-content">
+            <span class="close-modal" id="closeModal">&times;</span>
+            <h2 class="modal-title">Finalizar Pedido</h2>
+            
+            <form id="checkoutForm">
+                <div class="form-group">
+                    <label for="customerName">Nome completo</label>
+                    <input type="text" id="customerName" class="form-control" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="customerPhone">Telefone</label>
+                    <input type="tel" id="customerPhone" class="form-control" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="customerAddress">Endereço de entrega</label>
+                    <textarea id="customerAddress" class="form-control" required></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label for="customerNotes">Observações</label>
+                    <textarea id="customerNotes" class="form-control" placeholder="Alguma observação sobre o pedido?"></textarea>
+                </div>
+                
+                <button type="submit" class="btn btn-primary btn-block">Confirmar Pedido</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Menu data - easily editable
+        const menuData = {
+            pizzas: [
+                {
+                    id: 1,
+                    name: "Margherita",
+                    description: "Molho de tomate, mussarela, tomate fresco e manjericão",
+                    price: 35.90,
+                    image: "https://images.unsplash.com/photo-1604068549290-dea0e4a305ca?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1074&q=80"
+                },
+                {
+                    id: 2,
+                    name: "Calabresa",
+                    description: "Molho de tomate, mussarela, calabresa fatiada e cebola",
+                    price: 38.90,
+                    image: "https://images.unsplash.com/photo-1628840042765-356cda07504e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1180&q=80"
+                },
+                {
+                    id: 3,
+                    name: "Quatro Queijos",
+                    description: "Molho de tomate, mussarela, provolone, parmesão e gorgonzola",
+                    price: 42.90,
+                    image: "https://images.unsplash.com/photo-1595708684082-a173bb3a06c5?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1246&q=80"
+                },
+                {
+                    id: 4,
+                    name: "Portuguesa",
+                    description: "Molho de tomate, mussarela, presunto, ovos, cebola e azeitonas",
+                    price: 40.90,
+                    image: "https://images.unsplash.com/photo-1593560708920-61dd98c46a4e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1035&q=80"
+                },
+                {
+                    id: 5,
+                    name: "Frango com Catupiry",
+                    description: "Molho de tomate, mussarela, frango desfiado e catupiry",
+                    price: 42.90,
+                    image: "pizzapzz.jpg"
+                    
+                },
+                {
+                    id: 6,
+                    name: "Pepperoni",
+                    description: "Molho de tomate, mussarela e pepperoni",
+                    price: 45.90,
+                    image: "https://images.unsplash.com/photo-1628840042765-356cda07504e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1180&q=80"
+                }
+            ],
+            bebidas: [
+                {
+                    id: 101,
+                    name: "Coca-Cola 2L",
+                    description: "Refrigerante Coca-Cola 2 litros",
+                    price: 12.00,
+                    image: "https://images.unsplash.com/photo-1622483767028-3f66f32aef97?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80"
+                },
+                {
+                    id: 102,
+                    name: "Guaraná Antarctica 2L",
+                    description: "Refrigerante Guaraná Antarctica 2 litros",
+                    price: 10.00,
+                    image: "https://images.unsplash.com/photo-1629203851122-3726ec867058?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1335&q=80"
+                },
+                {
+                    id: 103,
+                    name: "Suco de Laranja 1L",
+                    description: "Suco natural de laranja 1 litro",
+                    price: 15.00,
+                    image: "https://images.unsplash.com/photo-1621506289937-a8e4df240d0b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1336&q=80"
+                },
+                {
+                    id: 104,
+                    name: "Água Mineral 500ml",
+                    description: "Água mineral sem gás 500ml",
+                    price: 4.00,
+                    image: "https://images.unsplash.com/photo-1548839140-29a749e1cf4d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1171&q=80"
+                },
+                {
+                    id: 105,
+                    name: "Heineken 600ml",
+                    description: "Cerveja Heineken long neck 600ml",
+                    price: 12.00,
+                    image: "https://images.unsplash.com/photo-1586993456357-62f95bcd0e37?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1172&q=80"
+                }
+            ],
+            combos: [
+                {
+                    id: 201,
+                    name: "Combo Família",
+                    description: "2 pizzas grandes + 1 refrigerante 2L",
+                    price: 89.90,
+                    image: "https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1081&q=80"
+                },
+                {
+                    id: 202,
+                    name: "Combo Casal",
+                    description: "1 pizza média + 1 refrigerante 1,5L",
+                    price: 49.90,
+                    image: "https://images.unsplash.com/photo-1565299507177-b0ac66763828?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1082&q=80"
+                }
+            ]
+        };
+
+        // Cart functionality
+        let cart = JSON.parse(localStorage.getItem('pizzariaCart')) || [];
+
+        // DOM elements
+        const menuGrid = document.getElementById('menuGrid');
+        const cartItems = document.getElementById('cartItems');
+        const cartCount = document.querySelector('.cart-count');
+        const subtotalEl = document.getElementById('subtotal');
+        const totalEl = document.getElementById('total');
+        const checkoutBtn = document.getElementById('checkoutBtn');
+        const whatsappBtn = document.getElementById('whatsappBtn');
+        const clearCartBtn = document.getElementById('clearCartBtn');
+        const checkoutModal = document.getElementById('checkoutModal');
+        const closeModal = document.getElementById('closeModal');
+        const checkoutForm = document.getElementById('checkoutForm');
+        const tabs = document.querySelectorAll('.tab');
+
+        // Initialize the page
+        document.addEventListener('DOMContentLoaded', function() {
+            renderMenu('pizzas');
+            updateCart();
+            
+            // Tab switching
+            tabs.forEach(tab => {
+                tab.addEventListener('click', function() {
+                    tabs.forEach(t => t.classList.remove('active'));
+                    this.classList.add('active');
+                    renderMenu(this.dataset.category);
+                });
+            });
+            
+            // Event listeners
+            checkoutBtn.addEventListener('click', openCheckoutModal);
+            whatsappBtn.addEventListener('click', sendWhatsAppOrder);
+            clearCartBtn.addEventListener('click', clearCart);
+            closeModal.addEventListener('click', closeCheckoutModal);
+            checkoutForm.addEventListener('submit', processOrder);
+            
+            // Close modal when clicking outside
+            window.addEventListener('click', function(event) {
+                if (event.target === checkoutModal) {
+                    closeCheckoutModal();
+                }
+            });
+        });
+
+        // Render menu items
+        function renderMenu(category) {
+            menuGrid.innerHTML = '';
+            
+            if (menuData[category]) {
+                menuData[category].forEach(item => {
+                    const cartItem = cart.find(cartItem => cartItem.id === item.id);
+                    const quantity = cartItem ? cartItem.quantity : 0;
+                    
+                    const menuItem = document.createElement('div');
+                    menuItem.className = 'menu-item';
+                    menuItem.innerHTML = `
+                        <img src="${item.image}" alt="${item.name}" class="item-image">
+                        <div class="item-content">
+                            <div class="item-header">
+                                <h3 class="item-title">${item.name}</h3>
+                                <div class="item-price">R$ ${item.price.toFixed(2)}</div>
+                            </div>
+                            <p class="item-description">${item.description}</p>
+                            <div class="item-actions">
+                                <div class="quantity-controls">
+                                    <button class="quantity-btn minus" data-id="${item.id}">-</button>
+                                    <span class="quantity">${quantity}</span>
+                                    <button class="quantity-btn plus" data-id="${item.id}">+</button>
+                                </div>
+                                <button class="btn btn-primary add-to-cart" data-id="${item.id}">Adicionar</button>
+                            </div>
+                        </div>
+                    `;
+                    
+                    menuGrid.appendChild(menuItem);
+                });
+                
+                // Add event listeners to buttons
+                document.querySelectorAll('.add-to-cart').forEach(button => {
+                    button.addEventListener('click', function() {
+                        const id = parseInt(this.dataset.id);
+                        addToCart(id);
+                    });
+                });
+                
+                document.querySelectorAll('.quantity-btn.plus').forEach(button => {
+                    button.addEventListener('click', function() {
+                        const id = parseInt(this.dataset.id);
+                        addToCart(id);
+                    });
+                });
+                
+                document.querySelectorAll('.quantity-btn.minus').forEach(button => {
+                    button.addEventListener('click', function() {
+                        const id = parseInt(this.dataset.id);
+                        removeFromCart(id);
+                    });
+                });
+            }
+        }
+
+        // Add item to cart
+        function addToCart(id) {
+            let item = null;
+            
+            // Find the item in menu data
+            for (const category in menuData) {
+                item = menuData[category].find(menuItem => menuItem.id === id);
+                if (item) break;
+            }
+            
+            if (item) {
+                const existingItem = cart.find(cartItem => cartItem.id === id);
+                
+                if (existingItem) {
+                    existingItem.quantity += 1;
+                } else {
+                    cart.push({
+                        id: item.id,
+                        name: item.name,
+                        price: item.price,
+                        quantity: 1
+                    });
+                }
+                
+                saveCart();
+                updateCart();
+                renderMenu(document.querySelector('.tab.active').dataset.category);
+            }
+        }
+
+        // Remove item from cart
+        function removeFromCart(id) {
+            const itemIndex = cart.findIndex(item => item.id === id);
+            
+            if (itemIndex !== -1) {
+                if (cart[itemIndex].quantity > 1) {
+                    cart[itemIndex].quantity -= 1;
+                } else {
+                    cart.splice(itemIndex, 1);
+                }
+                
+                saveCart();
+                updateCart();
+                renderMenu(document.querySelector('.tab.active').dataset.category);
+            }
+        }
+
+        // Update cart display
+        function updateCart() {
+            // Update cart items
+            if (cart.length === 0) {
+                cartItems.innerHTML = '<p style="text-align: center; color: var(--gray); padding: 2rem 0;">Seu carrinho está vazio</p>';
+            } else {
+                cartItems.innerHTML = '';
+                cart.forEach(item => {
+                    const cartItem = document.createElement('div');
+                    cartItem.className = 'cart-item';
+                    cartItem.innerHTML = `
+                        <div class="cart-item-info">
+                            <div class="cart-item-name">${item.name}</div>
+                            <div class="cart-item-price">R$ ${item.price.toFixed(2)}</div>
+                        </div>
+                        <div class="cart-item-quantity">
+                            <button class="quantity-btn minus" data-id="${item.id}">-</button>
+                            <span>${item.quantity}</span>
+                            <button class="quantity-btn plus" data-id="${item.id}">+</button>
+                        </div>
+                    `;
+                    cartItems.appendChild(cartItem);
+                });
+                
+                // Add event listeners to cart quantity buttons
+                document.querySelectorAll('.cart-item .quantity-btn.plus').forEach(button => {
+                    button.addEventListener('click', function() {
+                        const id = parseInt(this.dataset.id);
+                        addToCart(id);
+                    });
+                });
+                
+                document.querySelectorAll('.cart-item .quantity-btn.minus').forEach(button => {
+                    button.addEventListener('click', function() {
+                        const id = parseInt(this.dataset.id);
+                        removeFromCart(id);
+                    });
+                });
+            }
+            
+            // Update cart count
+            const totalItems = cart.reduce((total, item) => total + item.quantity, 0);
+            cartCount.textContent = totalItems;
+            
+            // Update totals
+            const subtotal = cart.reduce((total, item) => total + (item.price * item.quantity), 0);
+            const deliveryFee = 5.00;
+            const total = subtotal + deliveryFee;
+            
+            subtotalEl.textContent = `R$ ${subtotal.toFixed(2)}`;
+            totalEl.textContent = `R$ ${total.toFixed(2)}`;
+        }
+
+        // Save cart to localStorage
+        function saveCart() {
+            localStorage.setItem('pizzariaCart', JSON.stringify(cart));
+        }
+
+        // Clear cart
+        function clearCart() {
+            cart = [];
+            saveCart();
+            updateCart();
+            renderMenu(document.querySelector('.tab.active').dataset.category);
+        }
+
+        // Open checkout modal
+        function openCheckoutModal() {
+            if (cart.length === 0) {
+                alert('Seu carrinho está vazio. Adicione itens antes de finalizar o pedido.');
+                return;
+            }
+            
+            checkoutModal.style.display = 'flex';
+        }
+
+        // Close checkout modal
+        function closeCheckoutModal() {
+            checkoutModal.style.display = 'none';
+        }
+
+        // Process order form
+        function processOrder(e) {
+            e.preventDefault();
+            
+            const name = document.getElementById('customerName').value;
+            const phone = document.getElementById('customerPhone').value;
+            const address = document.getElementById('customerAddress').value;
+            const notes = document.getElementById('customerNotes').value;
+            
+            // Format WhatsApp message
+            let message = `Olá, gostaria de fazer um pedido:\n\n`;
+            message += `*Nome:* ${name}\n`;
+            message += `*Telefone:* ${phone}\n`;
+            message += `*Endereço:* ${address}\n\n`;
+            
+            if (notes) {
+                message += `*Observações:* ${notes}\n\n`;
+            }
+            
+            message += `*Itens do Pedido:*\n`;
+            cart.forEach(item => {
+                message += `- ${item.quantity}x ${item.name} - R$ ${(item.price * item.quantity).toFixed(2)}\n`;
+            });
+            
+            const subtotal = cart.reduce((total, item) => total + (item.price * item.quantity), 0);
+            const deliveryFee = 5.00;
+            const total = subtotal + deliveryFee;
+            
+            message += `\n*Subtotal:* R$ ${subtotal.toFixed(2)}\n`;
+            message += `*Taxa de entrega:* R$ ${deliveryFee.toFixed(2)}\n`;
+            message += `*Total:* R$ ${total.toFixed(2)}\n\n`;
+            message += `Obrigado!`;
+            
+            // Encode message for URL
+            const encodedMessage = encodeURIComponent(message);
+            
+            // Replace with your WhatsApp number (format: country code + area code + number, without + or spaces)
+            const whatsappNumber = "5511999999999";
+            
+            // Open WhatsApp
+            window.open(`https://wa.me/${whatsappNumber}?text=${encodedMessage}`, '_blank');
+            
+            // Close modal and clear cart
+            closeCheckoutModal();
+            clearCart();
+            
+            // Reset form
+            checkoutForm.reset();
+        }
+
+        // Send order via WhatsApp without form
+        function sendWhatsAppOrder() {
+            if (cart.length === 0) {
+                alert('Seu carrinho está vazio. Adicione itens antes de enviar o pedido.');
+                return;
+            }
+            
+            // Format WhatsApp message
+            let message = `Olá, gostaria de fazer um pedido:\n\n`;
+            
+            message += `*Itens do Pedido:*\n`;
+            cart.forEach(item => {
+                message += `- ${item.quantity}x ${item.name} - R$ ${(item.price * item.quantity).toFixed(2)}\n`;
+            });
+            
+            const subtotal = cart.reduce((total, item) => total + (item.price * item.quantity), 0);
+            const deliveryFee = 5.00;
+            const total = subtotal + deliveryFee;
+            
+            message += `\n*Subtotal:* R$ ${subtotal.toFixed(2)}\n`;
+            message += `*Taxa de entrega:* R$ ${deliveryFee.toFixed(2)}\n`;
+            message += `*Total:* R$ ${total.toFixed(2)}\n\n`;
+            message += `Por favor, entre em contato para confirmar o pedido e fornecer os dados de entrega. Obrigado!`;
+            
+            // Encode message for URL
+            const encodedMessage = encodeURIComponent(message);
+            
+            // Replace with your WhatsApp number (format: country code + area code + number, without + or spaces)
+            const whatsappNumber = "12988461978";
+            
+            // Open WhatsApp
+            window.open(`https://wa.me/5512988461978?text=ola${whatsappNumber}?text=${encodedMessage}`, '_blank');
+        }
+    </script>
+</body>
+</html>
